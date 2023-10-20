@@ -1,15 +1,8 @@
 # YARP API Gateway Sample
 
-Example showing how to use the YARP reverse proxy as a gateway for 2 APIs ("microservices").
+Fabric URL:
 
-You can access the gateway on this address: `https://localhost:7135`
-
-And the services are available on:
-- `Users.Api` - `https://localhost:5201`
-- `Products.Api` - `https://localhost:5101`
-
-
-open:
-http://localhost:5029/products-service/products
-
-https://localhost:7135/products-service/products
+With proxie:
+http://192.168.27.200:5029/WsAperturaCuenta/Service1.svc
+Without proxie:
+http://192.168.27.201/WsAperturaCuenta/Service1.svc
