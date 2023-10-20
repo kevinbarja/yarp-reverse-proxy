@@ -10,4 +10,6 @@ And the services are available on:
 
 
 open:
+ http://localhost:5029/products-service/products
+
 https://localhost:7135/products-service/products
