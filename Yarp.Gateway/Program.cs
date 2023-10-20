@@ -1,28 +1,38 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.HttpLogging;
+using Yarp.Gateway.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpLogging(logging =>
+{
+    logging.LoggingFields = HttpLoggingFields.All;
+});
+
+
+builder.Services.AddTransient<RequestBodyLoggingMiddleware>();
+builder.Services.AddTransient<ResponseBodyLoggingMiddleware>();
+
+builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer();
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//    .AddJwtBearer();
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("authenticated", policy =>
-        policy.RequireAuthenticatedUser());
-});
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicy("authenticated", policy =>
+//        policy.RequireAuthenticatedUser());
+//});
 
-builder.Services.AddRateLimiter(rateLimiterOptions =>
-{
-    rateLimiterOptions.AddFixedWindowLimiter("fixed", options =>
-    {
-        options.Window = TimeSpan.FromSeconds(10);
-        options.PermitLimit = 5;
-    });
-});
+//builder.Services.AddRateLimiter(rateLimiterOptions =>
+//{
+//    rateLimiterOptions.AddFixedWindowLimiter("fixed", options =>
+//    {
+//        options.Window = TimeSpan.FromSeconds(10);
+//        options.PermitLimit = 5;
+//    });
+//});
 
 builder.Services
     .AddReverseProxy()
@@ -36,14 +46,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
-app.UseAuthentication();
+//app.UseAuthentication();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
-app.UseRateLimiter();
+//app.UseRateLimiter();
+app.UseRequestBodyLogging();
+app.UseResponseBodyLogging();
 
+app.UseHttpLogging();
 app.MapReverseProxy();
 
 app.Run();

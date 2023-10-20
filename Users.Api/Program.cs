@@ -1,5 +1,4 @@
 using Bogus;
-using Bogus.DataSets;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +24,6 @@ app.MapGet("/users/{id}", (int id) =>
     return person is not null ? Results.Ok(person) : Results.NotFound();
 });
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.Run();

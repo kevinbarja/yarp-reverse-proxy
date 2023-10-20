@@ -1,4 +1,5 @@
 using Bogus;
+using Products.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,13 @@ app.MapGet("/products/{id}", (int id) =>
     return product is not null ? Results.Ok(product) : Results.NotFound();
 });
 
-app.UseHttpsRedirection();
+app.MapPost("/products", (Todo todo) =>
+{
+    return Results.Created($"/todoitems/{todo.Id + 1}", todo);
+});
+
+
+
+//app.UseHttpsRedirection();
 
 app.Run();
